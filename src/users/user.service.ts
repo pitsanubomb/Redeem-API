@@ -1,12 +1,11 @@
 import { User } from "./interfaces/user.interface"
+import { PrismaClient } from '@prisma/client'
 
-const mockUserList = [
-    { id: 1, username: 'admin', password: 'p@ssw0rd', firstName: 'Admin', lastName: 'Demo' },
-    { id: 2, username: 'userdev1', password: 'p@ssw0rd', firstName: 'User', lastName: 'Dev' },
-]
+const prisma = new PrismaClient()
+const userRepo = prisma.user
 
-export const findAllUsers = async (): Promise<User[]> => {
-    return mockUserList
+export const findAllUsers = async (): Promise<any> => {
+    return userRepo.findMany()
 }
 
 

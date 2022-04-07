@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  # redeemapi:
+    # image: redeemapi
+    # build:
+    #   context: .
+    #   dockerfile: ./Dockerfile
+    # environment:
+    #   NODE_ENV: production
+    # ports:
+    #   - 3000:3000
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=redeem
+      - POSTGRES_PASSWORD=p@ssw0rd
+      - POSTGRES_DB=redeem_dev

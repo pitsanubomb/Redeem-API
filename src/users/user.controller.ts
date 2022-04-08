@@ -14,6 +14,13 @@ UserController.get('/', async (req: Request, res: Response) => {
   }
 });
 
+UserController.get('/:userId', async (req: Request, res: Response) => {
+  try {
+    const user: User | null = await UserService.findUserById(req.params.userId);
+    res.send({ user: user });
+  } catch (error) {}
+});
+
 // Post method
 UserController.post('/', async (req: Request, res: Response) => {
   try {

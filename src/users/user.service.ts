@@ -4,6 +4,7 @@ import { User } from './interfaces/user.interface';
 const prisma = new PrismaClient();
 const userRepo = prisma.user;
 
+// Create USER
 export const createdUser = async (body: {
   email: string;
   password: string;
@@ -16,6 +17,7 @@ export const createdUser = async (body: {
   });
 };
 
+// GET USER
 export const findAllUsers = async (): Promise<User[]> => {
   return userRepo.findMany({
     select: {
@@ -51,9 +53,10 @@ export const authUser = async (body: {
   email: string;
   password: string;
 }): Promise<{ token: string } | undefined> => {
+  const email = body.email;
   const query = {
     where: {
-      email: body.email,
+      email,
     },
     select: {
       id: true,
@@ -64,4 +67,28 @@ export const authUser = async (body: {
   const user: { id: string; email: string; password: string } | null =
     await userRepo.findUnique(query);
   if (user && user.password) return { token: 'xxxxxx' };
+};
+
+// Update user
+export const updateUser = async (id: string, body: User): Promise<User> => {
+  const updateQuery = {
+    where: { id },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      point: true,
+      cash: true,
+      isActive: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    data: body,
+  };
+  return userRepo.update(updateQuery);
+};
+
+// Delete user
+export const delUser = async (id: string): Promise<void> => {
+  await userRepo.delete({ where: { id } });
 };

@@ -1,14 +1,25 @@
-import { User } from './interfaces/user.interface';
 import { PrismaClient } from '@prisma/client';
+import { User } from './interfaces/user.interface';
 
 const prisma = new PrismaClient();
 const userRepo = prisma.user;
+
+export const createdUser = async (body: {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl?: string;
+}) => {
+  return userRepo.create({
+    data: body,
+  });
+};
 
 export const findAllUsers = async (): Promise<User[]> => {
   return userRepo.findMany({
     select: {
       id: true,
-      username: true,
       firstName: true,
       lastName: true,
       point: true,
@@ -25,7 +36,6 @@ export const findUserById = async (id: string): Promise<User | null> => {
     where: { id: id },
     select: {
       id: true,
-      username: true,
       firstName: true,
       lastName: true,
       point: true,

@@ -17,7 +17,7 @@ InvoiceControler.post('/', reqAuth, async (req: any, res: Response) => {
 
 InvoiceControler.get('/', reqAuth, async (req: Request, res: Response) => {
   try {
-    const invoice = InvoiceService.getAllInvoice();
+    const invoice = await InvoiceService.getAllInvoice();
     res.status(200).send({ invoice: invoice });
   } catch (error) {
     res.status(500).send(error);

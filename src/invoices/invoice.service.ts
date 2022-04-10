@@ -25,5 +25,13 @@ export const createInvoice = async (body: {
 };
 
 export const getAllInvoice = async () => {
-  return invoiceRepo.findMany();
+  const invoices = await invoiceRepo.findMany({
+    include: { user: true, products: { include: { product: true } } },
+  });
+  return invoices.map((invoice) => {
+    return {
+      ...invoice,
+      products: invoice.products.map((product) => product.product),
+    };
+  });
 };

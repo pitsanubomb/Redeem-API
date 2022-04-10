@@ -46,7 +46,7 @@ UserController.post('/login', async (req: Request, res: Response) => {
         role: resService.user.role,
       };
 
-      const token = jwt.sign(tokenBody, 'secret@pass', { expiresIn: 120 });
+      const token = jwt.sign(tokenBody, 'secret@pass', { expiresIn: '1d' });
       const refresh = jwt.sign(tokenBody, 'secrete@pass', { expiresIn: '1y' });
       res
         .status(201)

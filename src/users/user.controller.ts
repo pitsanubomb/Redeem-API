@@ -2,11 +2,12 @@ import jwt from 'jsonwebtoken';
 import { Request, Response, Router } from 'express';
 import { User } from './interfaces/user.interface';
 import * as UserService from './user.service';
+import reqAuth from '../middleware/reqAuth.middleware';
 
 export const UserController = Router();
 
 // Get method
-UserController.get('/', async (req: Request, res: Response) => {
+UserController.get('/', reqAuth, async (req: Request, res: Response) => {
   try {
     const users: User[] = await UserService.findAllUsers();
     res.status(200).send({ users: users });

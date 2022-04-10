@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Role } from '@prisma/client';
 import { User } from './interfaces/user.interface';
 
 const prisma = new PrismaClient();
@@ -52,7 +52,9 @@ export const findUserById = async (id: string): Promise<User | null> => {
 export const authUser = async (body: {
   email: string;
   password: string;
-}): Promise<{ token: string } | undefined> => {
+}): Promise<
+  { user: { id: string; email: string; role: Role } } | undefined
+> => {
   const email = body.email;
   const query = {
     where: {
@@ -62,11 +64,17 @@ export const authUser = async (body: {
       id: true,
       email: true,
       password: true,
+      role: true,
     },
   };
-  const user: { id: string; email: string; password: string } | null =
-    await userRepo.findUnique(query);
-  if (user && user.password) return { token: 'xxxxxx' };
+  const user: {
+    id: string;
+    email: string;
+    password: string;
+    role: Role;
+  } | null = await userRepo.findUnique(query);
+  if (user && user.password)
+    return { user: { id: user.id, email: user.email, role: user.role } };
 };
 
 // Update user

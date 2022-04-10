@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { Request, Response, Router } from 'express';
 import { User } from './interfaces/user.interface';
 import * as UserService from './user.service';
@@ -35,6 +36,20 @@ UserController.post('/', async (req: Request, res: Response) => {
 UserController.post('/login', async (req: Request, res: Response) => {
   try {
     const resService = await UserService.authUser(req.body);
-    res.status(201).send(resService);
+    if (resService) {
+      const tokenBody = {
+        id: resService.user.id,
+        email: resService.user.email,
+        role: resService.user.role,
+      };
+
+      const token = jwt.sign(tokenBody, 'secret@pass', { expiresIn: 120 });
+      const refresh = jwt.sign(tokenBody, 'secrete@pass', { expiresIn: '1y' });
+      res
+        .status(201)
+        .send({ user: resService.user, token: token, refresh: refresh });
+    } else {
+      res.status(401).send({ message: 'Not have user' });
+    }
   } catch (error) {}
 });

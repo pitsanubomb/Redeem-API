@@ -20,7 +20,9 @@ UserController.get('/:userId', async (req: Request, res: Response) => {
   try {
     const user: User | null = await UserService.findUserById(req.params.userId);
     res.send({ user: user });
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 // Post method

@@ -1,4 +1,4 @@
-import { ProdcutController } from './products/product.controller';
+import { ProductControler } from './products/product.controller';
 import { errorHandler } from './middleware/error.middleware';
 import express, { Application } from 'express';
 import morgan from 'morgan';
@@ -15,7 +15,7 @@ app.use(logger);
 
 // Controller call
 app.use('/api/users', UserController);
-app.use('/api/product', ProdcutController);
+app.use('/api/product', ProductControler);
 
 // Middleware manual
 app.use(errorHandler);

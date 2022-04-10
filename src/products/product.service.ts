@@ -12,6 +12,15 @@ export interface productBody {
   imageUrl: string;
 }
 
+// Get product
+export const getAllProduct = async (): Promise<Product[] | null> => {
+  return productRepo.findMany();
+};
+
+export const getProductById = async (id: number): Promise<Product | null> => {
+  return productRepo.findUnique({ where: { id } });
+};
+
 // Create product
 export const createProduct = async (body: productBody): Promise<Product> => {
   return productRepo.create({
@@ -25,4 +34,9 @@ export const updateProduct = async (
   id: number
 ): Promise<Product> => {
   return productRepo.update({ where: { id }, data: body });
+};
+
+// Delete product
+export const delProduct = async (id: number): Promise<void> => {
+  await productRepo.delete({ where: { id } });
 };

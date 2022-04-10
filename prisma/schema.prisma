@@ -13,19 +13,19 @@ datasource db {
 // Start model schema
 
 model User {
-  id        String    @id @default(uuid())
-  role      Role      @default(USER)
+  id        String   @id @default(uuid())
+  role      Role     @default(USER)
   password  String
   firstName String
   lastName  String
   avatarUrl String?
-  email     String    @unique
-  cash      Float     @default(0)
-  point     Float     @default(0)
-  isActive  Boolean   @default(true)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Invoice   Invoice[]
+  email     String   @unique
+  cash      Float    @default(0)
+  point     Float    @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Invoice   Invoice?
 }
 
 model Product {
@@ -34,17 +34,20 @@ model Product {
   updatedAt   DateTime    @updatedAt
   productName String      @unique
   productType ProductType @default(CASH)
-  price       Float
+  price       Float?
+  point       Float?
+  imageUrl    String?
   reward      Float       @default(0)
   isActive    Boolean     @default(true)
   Invoice     Invoice[]
 }
 
 model Invoice {
-  id        Int     @id @default(autoincrement())
-  user      User    @relation(fields: [userId], references: [id])
-  userId    String
-  product   Product @relation(fields: [productId], references: [id])
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique
+  product   Product  @relation(fields: [productId], references: [id])
+  isReedeem Boolean? @default(false)
   productId Int
 }
 

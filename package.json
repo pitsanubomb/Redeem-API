@@ -4,6 +4,7 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
+    "migrate":"npx prisma migrate dev --name init",
     "db": "npx prisma generate",
     "compile": "tsc",
     "seed": "ts-node prisma/seed.ts",

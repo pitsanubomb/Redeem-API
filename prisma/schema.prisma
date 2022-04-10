@@ -13,42 +13,50 @@ datasource db {
 // Start model schema
 
 model User {
-  id        String   @id @default(uuid())
-  role      Role     @default(USER)
+  id        String    @id @default(uuid())
+  role      Role      @default(USER)
   password  String
   firstName String
   lastName  String
   avatarUrl String?
-  email     String   @unique
-  cash      Float    @default(0)
-  point     Float    @default(0)
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Invoice   Invoice?
+  email     String    @unique
+  cash      Float     @default(0)
+  point     Float     @default(0)
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Invoice   Invoice[]
 }
 
 model Product {
-  id          Int         @id @default(autoincrement())
-  createAt    DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  productName String      @unique
-  productType ProductType @default(CASH)
+  id          Int                @id @default(autoincrement())
+  createAt    DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  productName String             @unique
+  productType ProductType        @default(CASH)
   price       Float?
   point       Float?
   imageUrl    String?
-  reward      Float       @default(0)
-  isActive    Boolean     @default(true)
-  Invoice     Invoice[]
+  reward      Float              @default(0)
+  isActive    Boolean            @default(true)
+  invoices    ProductInInvoice[]
 }
 
 model Invoice {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @unique
-  product   Product  @relation(fields: [productId], references: [id])
-  isReedeem Boolean? @default(false)
+  id        Int                @id @default(autoincrement())
+  user      User               @relation(fields: [userId], references: [id])
+  userId    String
+  isReedeem Boolean?           @default(false)
+  products  ProductInInvoice[]
+}
+
+model ProductInInvoice {
+  product   Product @relation(fields: [productId], references: [id])
   productId Int
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId Int
+
+  @@id([productId, invoiceId])
 }
 
 enum Role {

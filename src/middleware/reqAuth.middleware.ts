@@ -11,6 +11,12 @@ const reqAuth = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
+  if (req.header('authorization') === null)
+    res.status(403).send({
+      message: 'No token provided!',
+      isTokenExpired: false,
+      isTokenProvide: false,
+    });
   const authToken = req.header('authorization')?.replace(/^Bearer\s/, '');
   if (!authToken)
     res.status(403).send({

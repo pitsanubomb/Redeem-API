@@ -13,7 +13,11 @@ export interface productBody {
 }
 
 // Get product
-export const getAllProduct = async (): Promise<Product[] | null> => {
+export const getAllProduct = async (
+  productType?: ProductType
+): Promise<Product[] | null> => {
+  if (productType)
+    return productRepo.findMany({ where: { productType: productType } });
   return productRepo.findMany();
 };
 

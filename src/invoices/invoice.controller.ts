@@ -6,19 +6,20 @@ export const InvoiceControler = Router();
 
 InvoiceControler.post('/', reqAuth, async (req: any, res: Response) => {
   try {
-    let body = req.body;
+    const body = req.body;
     body.userId = req.user.id;
-    await InvoiceService.createBuyProduct(body);
-    res.status(201).send({ message: 'Buy product success' });
+    await InvoiceService.createProduct(body);
+    res.status(201).send({ message: 'Buy products compleate' });
   } catch (error) {
+    console.log(error);
     res.status(500).send(error);
   }
 });
 
 InvoiceControler.get('/', reqAuth, async (req: Request, res: Response) => {
   try {
-    const invoice = await InvoiceService.getAllInvoice();
-    res.status(200).send({ invoice: invoice });
+    const responseData = await InvoiceService.getAllInvoice();
+    res.send({ invoice: responseData });
   } catch (error) {
     res.status(500).send(error);
   }

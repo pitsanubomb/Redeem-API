@@ -1,5 +1,6 @@
 import { errorHandler } from './middleware/error.middleware';
 import express, { Application } from 'express';
+import cors from 'cors';
 import morgan from 'morgan';
 import { UserController } from './users/user.controller';
 import { notFoundHandler } from './middleware/notfound.middleware';
@@ -10,6 +11,7 @@ const app: Application = express();
 const logger = morgan('common');
 
 app.use(express.json());
+app.use(cors());
 
 // Logger
 app.use(logger);

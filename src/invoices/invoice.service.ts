@@ -2,33 +2,31 @@ import { Invoice, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 const invoiceRepo = prisma.invoice;
-const productInvoiceRepo = prisma.productInInvoice;
 
-export const createBuyProduct = async (body: {
+export const createProduct = async (body: {
+  userId: string;
   productList: Array<{ id: number; quantity: number }>;
-  useId: string;
-  isRedeem?: boolean;
 }) => {
-  const listOfProductInvoice: Array<{ id: number }> = [];
-  for (const products of body.productList) {
-    const productInvoice = await productInvoiceRepo.create({
-      data: {
-        quantity: products.quantity,
-        products: { connect: { id: products.id } },
-        invoices: {},
-      },
-    });
-    listOfProductInvoice.push({ id: productInvoice.id });
-    return invoiceRepo.create({
-      data: {
-        user: { connect: { id: body.useId } },
-        isRedeem: body.isRedeem || false,
-        invoices: { connect: listOfProductInvoice },
-      },
+  const createData: Array<{
+    products: { connect: { id: number } };
+    quantity: number;
+  }> = [];
+  for (const productInvoice of body.productList) {
+    createData.push({
+      products: { connect: { id: productInvoice.id } },
+      quantity: productInvoice.quantity,
     });
   }
+  await invoiceRepo.create({
+    data: {
+      customer: { connect: { id: body.userId } },
+      ProductOrder: { create: createData },
+    },
+  });
 };
 
 export const getAllInvoice = async (): Promise<Invoice[]> => {
-  return invoiceRepo.findMany({ include: { user: true, invoices: true } });
+  return invoiceRepo.findMany({
+    include: { ProductOrder: { include: { products: true } }, customer: true },
+  });
 };

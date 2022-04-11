@@ -1,5 +1,5 @@
 import { PrismaClient, Role } from '@prisma/client';
-import { User } from './interfaces/user.interface';
+import { UpdateUser, User } from './interfaces/user.interface';
 
 const prisma = new PrismaClient();
 const userRepo = prisma.user;
@@ -73,12 +73,16 @@ export const authUser = async (body: {
     password: string;
     role: Role;
   } | null = await userRepo.findUnique(query);
-  if (user && user.password)
+  if (user)
     return { user: { id: user.id, email: user.email, role: user.role } };
+  throw new Error('Not found User');
 };
 
 // Update user
-export const updateUser = async (id: string, body: User): Promise<User> => {
+export const updateUser = async (
+  id: string,
+  body: UpdateUser
+): Promise<User> => {
   const updateQuery = {
     where: { id },
     select: {

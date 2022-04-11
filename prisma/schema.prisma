@@ -29,34 +29,34 @@ model User {
 }
 
 model Product {
-  id          Int                @id @default(autoincrement())
-  createAt    DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  productName String             @unique
-  productType ProductType        @default(CASH)
-  price       Float?
-  point       Float?
-  imageUrl    String?
-  reward      Float              @default(0)
-  isActive    Boolean            @default(true)
-  invoices    ProductInInvoice[]
+  id               Int               @id @default(autoincrement())
+  createAt         DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  productName      String            @unique
+  productType      ProductType       @default(CASH)
+  price            Float?
+  point            Float?
+  imageUrl         String?
+  reward           Float             @default(0)
+  isActive         Boolean           @default(true)
+  ProductInInvoice ProductInInvoice?
 }
 
 model Invoice {
-  id        Int                @id @default(autoincrement())
-  user      User               @relation(fields: [userId], references: [id])
-  userId    String
-  isReedeem Boolean?           @default(false)
-  products  ProductInInvoice[]
+  id       Int                @id @default(autoincrement())
+  user     User               @relation(fields: [userId], references: [id])
+  userId   String
+  isRedeem Boolean?           @default(false)
+  invoices ProductInInvoice[]
 }
 
 model ProductInInvoice {
-  product   Product @relation(fields: [productId], references: [id])
-  productId Int
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  id        Int     @id @default(autoincrement())
+  quantity  Int
+  products  Product @relation(fields: [productId], references: [id])
+  productId Int     @unique
+  invoices  Invoice @relation(fields: [invoiceId], references: [id])
   invoiceId Int
-
-  @@id([productId, invoiceId])
 }
 
 enum Role {

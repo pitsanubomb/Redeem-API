@@ -8,7 +8,7 @@ InvoiceControler.post('/', reqAuth, async (req: any, res: Response) => {
   try {
     let body = req.body;
     body.userId = req.user.id;
-    await InvoiceService.createInvoice(body);
+    await InvoiceService.createBuyProduct(body);
     res.status(201).send({ message: 'Buy product success' });
   } catch (error) {
     res.status(500).send(error);

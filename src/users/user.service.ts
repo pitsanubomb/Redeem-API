@@ -104,3 +104,87 @@ export const updateUser = async (
 export const delUser = async (id: string): Promise<void> => {
   await userRepo.delete({ where: { id } });
 };
+
+export const addPoint = async (id: string, point: number): Promise<User> => {
+  const user = await userRepo.findUnique({ where: { id: id } });
+  if (!user) throw new Error('Not found User');
+  point += user.point;
+  const updateQuery = {
+    where: { id },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      point: true,
+      cash: true,
+      isActive: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    data: { point: point },
+  };
+  return userRepo.update(updateQuery);
+};
+
+export const addCash = async (id: string, cash: number): Promise<User> => {
+  const user = await userRepo.findUnique({ where: { id: id } });
+  if (!user) throw new Error('Not found User');
+  cash += user.cash;
+  const updateQuery = {
+    where: { id },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      point: true,
+      cash: true,
+      isActive: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    data: { cash: cash },
+  };
+  return userRepo.update(updateQuery);
+};
+
+export const minusPoint = async (id: string, point: number): Promise<User> => {
+  const user = await userRepo.findUnique({ where: { id: id } });
+  if (!user) throw new Error('Not found User');
+  user.point -= point;
+  const updateQuery = {
+    where: { id },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      point: true,
+      cash: true,
+      isActive: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    data: { point: point },
+  };
+  return userRepo.update(updateQuery);
+};
+
+export const minusCash = async (id: string, cash: number): Promise<User> => {
+  const user = await userRepo.findUnique({ where: { id: id } });
+  if (!user) throw new Error('Not found User');
+  user.cash -= cash;
+  const updateQuery = {
+    where: { id },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      point: true,
+      cash: true,
+      isActive: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    data: { cash: cash },
+  };
+  return userRepo.update(updateQuery);
+};

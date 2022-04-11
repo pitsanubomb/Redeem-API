@@ -35,6 +35,15 @@ UserController.post('/', async (req: Request, res: Response) => {
   }
 });
 
+// Path method
+UserController.patch('/:userId', async (req: Request, res: Response) => {
+  try {
+    await UserService.updateUser(req.params.userId, req.body);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // Auth method
 UserController.post('/login', async (req: Request, res: Response) => {
   try {
@@ -47,10 +56,8 @@ UserController.post('/login', async (req: Request, res: Response) => {
       };
 
       const token = jwt.sign(tokenBody, 'secret@pass', { expiresIn: '1d' });
-      const refresh = jwt.sign(tokenBody, 'secrete@pass', { expiresIn: '1y' });
-      res
-        .status(201)
-        .send({ user: resService.user, token: token, refresh: refresh });
+      // const refresh = jwt.sign(tokenBody, 'secrete@pass', { expiresIn: '1y' });
+      res.status(201).send({ user: resService.user, token: token });
     } else {
       res.status(401).send({ message: 'Not have user' });
     }

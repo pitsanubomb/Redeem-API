@@ -12,6 +12,15 @@ export interface productBody {
   imageUrl: string;
 }
 
+export interface updateProductBody {
+  productName?: string;
+  productType?: ProductType;
+  point?: number;
+  price?: number;
+  reward?: number;
+  imageUrl?: string;
+}
+
 // Get product
 export const getAllProduct = async (
   productType?: ProductType
@@ -34,7 +43,7 @@ export const createProduct = async (body: productBody): Promise<Product> => {
 
 // Update product
 export const updateProduct = async (
-  body: productBody,
+  body: updateProductBody,
   id: number
 ): Promise<Product> => {
   return productRepo.update({ where: { id }, data: body });

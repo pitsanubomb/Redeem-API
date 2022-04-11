@@ -26,7 +26,17 @@ export const createProduct = async (body: {
 };
 
 export const getAllInvoice = async (): Promise<Invoice[]> => {
-  return invoiceRepo.findMany({
+  const res = await invoiceRepo.findMany({
     include: { ProductOrder: { include: { products: true } }, customer: true },
+  });
+  return res.map((invoice) => {
+    return {
+      ...invoice,
+      customer: {
+        Id: invoice.customer.id,
+        Fullname: invoice.customer.firstName + ' ' + invoice.customer.lastName,
+        Emai: invoice.customer.email,
+      },
+    };
   });
 };

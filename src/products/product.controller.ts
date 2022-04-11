@@ -14,11 +14,10 @@ ProductControler.post('/', reqAuth, async (req: Request, res: Response) => {
   }
 });
 
-ProductControler.get('/', reqAuth, async (req: Request, res: Response) => {
+ProductControler.get('/', async (req: Request, res: Response) => {
   try {
     const productList: Product[] | null = await ProductService.getAllProduct();
     if (req.query.productType) {
-      let productType: ProductType;
       switch (req.query.productType) {
         case 'cash':
           try {
@@ -41,8 +40,9 @@ ProductControler.get('/', reqAuth, async (req: Request, res: Response) => {
         default:
           break;
       }
+    } else {
+      res.status(200).send({ product: productList });
     }
-    res.status(200).send({ product: productList });
   } catch (error) {
     res.status(500).send(error);
   }

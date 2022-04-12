@@ -35,14 +35,69 @@ UserController.post('/', async (req: Request, res: Response) => {
   }
 });
 
-// Path method
-UserController.patch('/:userId', async (req: Request, res: Response) => {
+// Update method
+UserController.put('/:userId', async (req: Request, res: Response) => {
   try {
     await UserService.updateUser(req.params.userId, req.body);
+    res.status(200).send({ message: 'Update data success' });
   } catch (error) {
     res.status(500).send(error);
   }
 });
+
+UserController.patch(
+  '/add/point/:userId/:point',
+  async (req: Request, res: Response) => {
+    try {
+      await UserService.addPoint(
+        req.params.userId,
+        parseFloat(req.params.point)
+      );
+      res.status(200).send({ message: 'Add point success' });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }
+);
+
+UserController.patch(
+  '/minus/point/:userId/:point',
+  async (req: Request, res: Response) => {
+    try {
+      await UserService.minusPoint(
+        req.params.userId,
+        parseFloat(req.params.point)
+      );
+      res.status(200).send({ message: 'Minus point success' });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }
+);
+
+UserController.patch(
+  '/add/cash/:userId/:cash',
+  async (req: Request, res: Response) => {
+    try {
+      await UserService.addCash(req.params.userId, parseFloat(req.params.cash));
+      res.status(200).send({ message: 'Add cash success' });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }
+);
+
+UserController.patch(
+  '/minus/cash/:userId/:cash',
+  async (req: Request, res: Response) => {
+    try {
+      await UserService.addCash(req.params.userId, parseFloat(req.params.cash));
+      res.status(200).send({ message: 'Minus cash success' });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }
+);
 
 // Auth method
 UserController.post('/login', async (req: Request, res: Response) => {

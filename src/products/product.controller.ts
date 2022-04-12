@@ -48,7 +48,7 @@ ProductControler.get('/', async (req: Request, res: Response) => {
   }
 });
 
-ProductControler.get('/:id', reqAuth, async (req: Request, res: Response) => {
+ProductControler.get('/:id', async (req: Request, res: Response) => {
   try {
     const id: number = parseInt(req.params.id);
     const product: Product | null = await ProductService.getProductById(id);

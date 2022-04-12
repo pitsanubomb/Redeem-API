@@ -8,6 +8,7 @@ EXPOSE 3000
 RUN tsc
 RUN npx prisma migrate dev --name init
 RUN npx prisma generate
+RUN npm run seed
 RUN chown -R node /usr/src/app
 USER node
 CMD ["node", "app.js"]
